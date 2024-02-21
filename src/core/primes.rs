@@ -97,7 +97,9 @@ enum State {
     More,
 }
 
-pub fn factors(mut n: usize) -> BTreeMap<usize, usize> {
+pub type PrimeFactors = BTreeMap<usize, usize>;
+
+pub fn factors(mut n: usize) -> PrimeFactors {
     let mut prime_factors = BTreeMap::new();
 
     let mut count = 0;
