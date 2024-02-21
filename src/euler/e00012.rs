@@ -6,7 +6,7 @@ pub fn solve(max: usize) -> usize {
     for i in 1.. {
         triangular += i;
         let factors = factors(triangular);
-        if factors.iter().map(|(_, f)| f + 1).product::<usize>() > max {
+        if factors.values().map(|f| f + 1).product::<usize>() > max {
             return triangular;
         }
     }
