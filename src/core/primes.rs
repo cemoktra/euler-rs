@@ -1,0 +1,162 @@
+use std::collections::{BTreeMap, HashMap};
+
+#[derive(Clone)]
+pub struct Primes {
+    state: State,
+    candidate: usize,
+    sieve: HashMap<usize, (usize, usize)>,
+    base_primes: Box<Option<Primes>>,
+    p: usize,
+    q: usize,
+}
+
+impl Default for Primes {
+    fn default() -> Self {
+        Self {
+            state: State::Two,
+            candidate: 7,
+            sieve: HashMap::new(),
+            base_primes: Box::new(None),
+            p: 0,
+            q: 0,
+        }
+    }
+}
+
+impl Iterator for Primes {
+    type Item = usize;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match &self.state {
+            State::Two => {
+                self.state = State::Three;
+                Some(2)
+            }
+            State::Three => {
+                self.state = State::Five;
+                Some(3)
+            }
+            State::Five => {
+                self.state = State::Seven;
+                Some(5)
+            }
+            State::Seven => {
+                self.state = State::More;
+                Some(7)
+            }
+            State::More => {
+                let mut internal = std::mem::replace(&mut self.base_primes, Box::new(None))
+                    .unwrap_or_else(|| {
+                        let mut primes = Self::default();
+                        primes.next();
+                        primes
+                    });
+
+                if self.q == 0 {
+                    self.p = internal.next().expect("next prime can be generated");
+                    self.q = self.p * self.p;
+                }
+
+                loop {
+                    self.candidate += 2;
+                    let step = if let Some(step) = self.sieve.remove(&self.candidate) {
+                        step
+                    } else if self.candidate < self.q {
+                        self.base_primes = Box::new(Some(internal));
+                        self.state = State::More;
+                        return Some(self.candidate);
+                    } else {
+                        assert_eq!(self.candidate, self.q);
+                        let step = (self.q + 2 * self.p, 2 * self.p);
+                        self.p = internal.next().expect("next prime can be generated");
+                        self.q = self.p * self.p;
+                        step
+                    };
+
+                    let mut b = step.0;
+                    for m in (step.0..).step_by(step.1) {
+                        if !self.sieve.contains_key(&m) {
+                            b = m;
+                            break;
+                        }
+                    }
+
+                    self.sieve.insert(b, (b + step.1, step.1));
+                }
+            }
+        }
+    }
+}
+
+#[derive(Clone)]
+enum State {
+    Two,
+    Three,
+    Five,
+    Seven,
+    More,
+}
+
+pub fn factors(mut n: usize) -> BTreeMap<usize, usize> {
+    let mut prime_factors = BTreeMap::new();
+
+    let mut count = 0;
+    while n & 1 == 0 {
+        n >>= 1;
+        count += 1;
+    }
+
+    if count > 0 {
+        prime_factors.insert(2, count);
+    }
+
+    let mut factor = 3;
+    while factor * factor <= n {
+        count = 0;
+        while n % factor == 0 {
+            n /= factor;
+            count += 1;
+        }
+        if count > 0 {
+            prime_factors.insert(factor, count);
+        }
+
+        factor += 2;
+    }
+
+    if n > 1 {
+        prime_factors.insert(n, 1);
+    }
+
+    prime_factors
+}
+
+#[cfg(test)]
+mod test {
+
+    #[test]
+    fn test_primes() {
+        let primes = super::Primes::default();
+        let mut iter = primes.into_iter();
+        assert_eq!(Some(2), iter.next());
+        assert_eq!(Some(3), iter.next());
+        assert_eq!(Some(5), iter.next());
+        assert_eq!(Some(7), iter.next());
+        assert_eq!(Some(11), iter.next());
+        assert_eq!(Some(13), iter.next());
+        assert_eq!(Some(17), iter.next());
+        assert_eq!(Some(19), iter.next());
+        assert_eq!(Some(23), iter.next());
+        assert_eq!(Some(29), iter.next());
+        assert_eq!(Some(31), iter.next());
+    }
+    #[test]
+    fn test_factors() {
+        let factors = super::factors(13195);
+        assert_eq!(4, factors.len());
+        assert!(factors.contains_key(&5));
+        assert!(factors.contains_key(&7));
+        assert!(factors.contains_key(&13));
+        assert!(factors.contains_key(&29));
+    }
+}
