@@ -86,3 +86,44 @@ fn bench_00015(bencher: divan::Bencher, n: u128) {
 fn bench_00016(bencher: divan::Bencher, n: usize) {
     bencher.bench_local(move || euler::euler::e00016::solve(n));
 }
+
+#[divan::bench(args = [1000])]
+fn bench_00017(bencher: divan::Bencher, n: usize) {
+    bencher.bench_local(move || euler::euler::e00017::solve(n));
+}
+
+#[divan::bench]
+fn bench_00018(bencher: divan::Bencher) {
+    bencher.bench_local(move || euler::euler::e00018::solve(euler::euler::e00018::DATA));
+}
+
+#[divan::bench]
+fn bench_00019(bencher: divan::Bencher) {
+    bencher.bench_local(euler::euler::e00019::solve);
+}
+
+#[divan::bench(args = [100])]
+fn bench_00020(bencher: divan::Bencher, n: usize) {
+    bencher.bench_local(move || euler::euler::e00020::solve(n));
+}
+
+#[divan::bench(args = [10000])]
+fn bench_00021(bencher: divan::Bencher, n: usize) {
+    bencher.bench_local(move || euler::euler::e00021::solve(n));
+}
+
+#[divan::bench]
+fn bench_00022(bencher: divan::Bencher) {
+    let file_content = std::fs::read_to_string("data/e00022.txt").unwrap();
+    let mut names = file_content
+        .split(',')
+        .map(|name| &name[1..name.len() - 1])
+        .collect::<Vec<_>>();
+
+    bencher.bench_local(move || euler::euler::e00022::solve(names.as_mut_slice()));
+}
+
+#[divan::bench]
+fn bench_00023(bencher: divan::Bencher) {
+    bencher.bench_local(euler::euler::e00023::solve);
+}

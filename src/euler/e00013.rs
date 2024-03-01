@@ -1,3 +1,5 @@
+use crate::core::ubig::UBig;
+
 const DATA: [&str; 100] = [
     "37107287533902102798797998220837590246510135740250",
     "46376937677490009712648124896970078050417018260538",
@@ -102,31 +104,25 @@ const DATA: [&str; 100] = [
 ];
 
 pub fn solve(n: usize) -> usize {
-    let mut outcome = [0usize; 50];
+    let mut sum = UBig::<60>::zero();
 
     for r in DATA {
-        r.bytes()
-            .enumerate()
-            .rev()
-            .for_each(|(i, c)| outcome[i] += (c - 48) as usize)
+        let parsed = r.bytes().map(|c| c - 48).collect::<Vec<_>>();
+        let parsed: UBig<60> = parsed.as_slice().into();
+        sum += parsed;
     }
 
-    let mut carry = 0;
-    outcome.iter_mut().rev().for_each(|value| {
-        let sum = *value + carry;
-        *value = sum % 10;
-        carry = sum / 10;
-    });
-
-    let mut numbers = (carry.ilog10() + 1) as usize;
-    let mut i = 0;
-    while numbers < n {
-        carry = carry * 10 + outcome[i];
-        numbers += 1;
-        i += 1;
+    let digits = sum
+        .digits()
+        .skip_while(|n| **n == 0)
+        .take(n)
+        .collect::<Vec<_>>();
+    let mut result = 0;
+    for (i, d) in digits.iter().rev().enumerate() {
+        result += *d * 10usize.pow(i as u32);
     }
 
-    carry
+    result
 }
 
 #[cfg(test)]

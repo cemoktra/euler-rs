@@ -1,17 +1,13 @@
+use crate::core::ubig::UBig;
+
 pub fn solve(n: usize) -> usize {
-    let mut outcome = [0usize; 400];
-    outcome[399] = 2;
+    let mut big: UBig<400> = [2].as_slice().into();
 
     for _ in 1..n {
-        let mut carry = 0;
-        outcome.iter_mut().rev().for_each(|value| {
-            let sum = *value + *value + carry;
-            *value = sum % 10;
-            carry = sum / 10;
-        });
+        big = big + big;
     }
 
-    outcome.iter().sum()
+    big.digits().sum()
 }
 
 #[cfg(test)]

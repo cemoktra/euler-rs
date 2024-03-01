@@ -133,9 +133,40 @@ pub fn factors(mut n: usize) -> PrimeFactors {
     prime_factors
 }
 
+pub trait Divisors {
+    fn divisors(&self) -> Vec<usize>;
+}
+
+fn divisors(value: usize, factors: &PrimeFactors, factor: &mut Vec<usize>, divs: &mut Vec<usize>) {
+    match factor.pop() {
+        None => {
+            divs.push(value);
+        }
+        Some(f) => {
+            let power = factors.get(&f).cloned().unwrap_or_default();
+            for p in 0..=power {
+                divisors(
+                    value * (f.pow(p as u32)),
+                    factors,
+                    &mut factor.clone(),
+                    divs,
+                );
+            }
+        }
+    }
+}
+
+impl Divisors for PrimeFactors {
+    fn divisors(&self) -> Vec<usize> {
+        let mut factors = self.keys().cloned().collect::<Vec<_>>();
+        let mut divs = vec![];
+        divisors(1, self, &mut factors, &mut divs);
+        divs
+    }
+}
+
 #[cfg(test)]
 mod test {
-
     #[test]
     fn test_primes() {
         let primes = super::Primes::default();
@@ -152,6 +183,7 @@ mod test {
         assert_eq!(Some(29), iter.next());
         assert_eq!(Some(31), iter.next());
     }
+
     #[test]
     fn test_factors() {
         let factors = super::factors(13195);
@@ -160,5 +192,16 @@ mod test {
         assert!(factors.contains_key(&7));
         assert!(factors.contains_key(&13));
         assert!(factors.contains_key(&29));
+    }
+
+    #[test]
+    fn test_divisors() {
+        use crate::core::primes::Divisors;
+
+        let divisors = super::factors(220).divisors();
+        assert_eq!(
+            divisors.as_slice(),
+            [1, 2, 4, 5, 10, 20, 11, 22, 44, 55, 110, 220]
+        );
     }
 }
