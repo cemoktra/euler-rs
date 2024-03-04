@@ -1,7 +1,7 @@
 use crate::core::fibonacci::Fibonacci;
 
 pub fn solve(max: usize) -> usize {
-    Fibonacci::default()
+    Fibonacci::<usize>::default()
         .take_while(|n| *n < max)
         .filter(|n| n % 2 == 0)
         .sum()
