@@ -1,30 +1,3 @@
-use super::ubig::UBig;
-
-trait FibonacciInit {
-    fn one() -> Self;
-    fn two() -> Self;
-}
-
-impl FibonacciInit for usize {
-    fn one() -> Self {
-        1
-    }
-
-    fn two() -> Self {
-        2
-    }
-}
-
-impl<const N: usize> FibonacciInit for UBig<N> {
-    fn one() -> Self {
-        1usize.into()
-    }
-
-    fn two() -> Self {
-        2usize.into()
-    }
-}
-
 pub struct Fibonacci<T> {
     current: T,
     next: T,
@@ -32,12 +5,12 @@ pub struct Fibonacci<T> {
 
 impl<T> Default for Fibonacci<T>
 where
-    T: FibonacciInit,
+    T: From<usize>,
 {
     fn default() -> Self {
         Self {
-            current: T::one(),
-            next: T::two(),
+            current: 1usize.into(),
+            next: 2usize.into(),
         }
     }
 }
