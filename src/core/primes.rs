@@ -1,5 +1,15 @@
 use std::collections::{BTreeMap, HashMap};
 
+pub fn is_prime(p: usize) -> bool {
+    for d in 2..p / 2 {
+        if p % d == 0 {
+            return false;
+        }
+    }
+
+    true
+}
+
 #[derive(Clone)]
 pub struct Primes {
     state: State,

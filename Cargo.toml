@@ -11,3 +11,4 @@ harness = false
 
 [dependencies]
 divan = "0.1.13"
+num-bigint = "0.4.4"
