@@ -13,6 +13,38 @@ impl<const N: usize> UBig<N> {
     pub fn digits(&self) -> impl DoubleEndedIterator<Item = &usize> {
         self.num.iter()
     }
+
+    pub fn pow(self, mut exp: usize) -> Self {
+        let is_zero = self.num.iter().all(|d| *d == 0);
+        let is_one = self.num[N - 1] == 0 && self.num[0..N - 1].iter().all(|d| *d == 0);
+
+        if is_one || exp == 0 {
+            1usize.into()
+        } else if is_zero {
+            Self::zero()
+        } else {
+            let mut res = self;
+            while exp & 1 == 0 {
+                res *= res;
+                exp >>= 1;
+            }
+
+            if exp == 1 {
+                return res;
+            }
+
+            let mut acc = res.clone();
+            while exp > 1 {
+                exp >>= 1;
+                res *= res;
+                if exp & 1 == 1 {
+                    acc *= res;
+                }
+            }
+
+            acc
+        }
+    }
 }
 
 impl<const N: usize> Display for UBig<N> {
@@ -137,6 +169,21 @@ mod test {
         let y: super::UBig<20> = [1, 2, 3, 4, 5].as_slice().into();
         let expected: super::UBig<20> = [1, 5, 1, 8, 4, 3, 5].as_slice().into();
         let z = x * y;
+
+        assert_eq!(z, expected);
+    }
+
+    #[test]
+    fn test_pow() {
+        let x: super::UBig<7> = [1, 0].as_slice().into();
+        let expected: super::UBig<7> = [1, 0, 0, 0, 0, 0, 0].as_slice().into();
+        let z = x.pow(6);
+
+        assert_eq!(z, expected);
+
+        let x: super::UBig<4> = [2].as_slice().into();
+        let expected: super::UBig<4> = [4, 0, 9, 6].as_slice().into();
+        let z = x.pow(12);
 
         assert_eq!(z, expected);
     }
