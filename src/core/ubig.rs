@@ -33,7 +33,7 @@ impl<const N: usize> UBig<N> {
                 return res;
             }
 
-            let mut acc = res.clone();
+            let mut acc = res;
             while exp > 1 {
                 exp >>= 1;
                 res *= res;
