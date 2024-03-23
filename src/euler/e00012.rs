@@ -1,11 +1,11 @@
-use crate::core::primes::factors;
+use crate::core::primes::prime_factors;
 
 pub fn solve(max: usize) -> usize {
     let mut triangular = 0;
 
     for i in 1.. {
         triangular += i;
-        let factors = factors(triangular);
+        let factors = prime_factors(triangular);
         if factors.values().map(|f| f + 1).product::<usize>() > max {
             return triangular;
         }

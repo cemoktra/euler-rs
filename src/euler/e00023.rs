@@ -1,4 +1,4 @@
-use crate::core::primes::{factors, Divisors};
+use crate::core::primes::{prime_factors, Divisors};
 
 const LIMIT: usize = 28124;
 
@@ -6,7 +6,12 @@ pub fn solve() -> usize {
     let mut abundant = [false; LIMIT];
 
     for (n, item) in abundant.iter_mut().enumerate().take(LIMIT).skip(1) {
-        let sum_divisors = factors(n).divisors().iter().rev().skip(1).sum::<usize>();
+        let sum_divisors = prime_factors(n)
+            .divisors()
+            .iter()
+            .rev()
+            .skip(1)
+            .sum::<usize>();
         if sum_divisors > n {
             *item = true;
         }

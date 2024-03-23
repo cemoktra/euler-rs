@@ -109,7 +109,7 @@ enum State {
 
 pub type PrimeFactors = BTreeMap<usize, usize>;
 
-pub fn factors(mut n: usize) -> PrimeFactors {
+pub fn prime_factors(mut n: usize) -> PrimeFactors {
     let mut prime_factors = BTreeMap::new();
 
     let mut count = 0;
@@ -196,7 +196,7 @@ mod test {
 
     #[test]
     fn test_factors() {
-        let factors = super::factors(13195);
+        let factors = super::prime_factors(13195);
         assert_eq!(4, factors.len());
         assert!(factors.contains_key(&5));
         assert!(factors.contains_key(&7));
@@ -208,7 +208,7 @@ mod test {
     fn test_divisors() {
         use crate::core::primes::Divisors;
 
-        let divisors = super::factors(220).divisors();
+        let divisors = super::prime_factors(220).divisors();
         assert_eq!(
             divisors.as_slice(),
             [1, 2, 4, 5, 10, 20, 11, 22, 44, 55, 110, 220]

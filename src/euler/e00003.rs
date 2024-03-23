@@ -1,5 +1,5 @@
 pub fn solve(n: usize) -> usize {
-    let factors = crate::core::primes::factors(n);
+    let factors = crate::core::primes::prime_factors(n);
     factors.into_keys().max().unwrap_or_default()
 }
 
