@@ -162,3 +162,8 @@ fn bench_00029(bencher: divan::Bencher, n: usize) {
 fn bench_00030(bencher: divan::Bencher, n: u32) {
     bencher.bench_local(move || euler::euler::e00030::solve(n));
 }
+
+#[divan::bench(args = [200])]
+fn bench_00031(bencher: divan::Bencher, n: usize) {
+    bencher.bench_local(move || euler::euler::e00031::solve(n));
+}
