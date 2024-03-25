@@ -187,3 +187,8 @@ fn bench_00034(bencher: divan::Bencher) {
 fn bench_00035(bencher: divan::Bencher, n: usize) {
     bencher.bench_local(move || euler::euler::e00035::solve(n));
 }
+
+#[divan::bench(args = [1_000_000])]
+fn bench_00036(bencher: divan::Bencher, n: usize) {
+    bencher.bench_local(move || euler::euler::e00036::solve(n));
+}
