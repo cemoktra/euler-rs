@@ -10,6 +10,6 @@ pub fn solve(n: usize) -> usize {
 mod test {
     #[test]
     fn test() {
-        assert_eq!(0, super::solve(1_000_000));
+        assert_eq!(872187, super::solve(1_000_000));
     }
 }
