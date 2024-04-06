@@ -217,3 +217,14 @@ fn bench_00040(bencher: divan::Bencher) {
 fn bench_00041(bencher: divan::Bencher) {
     bencher.bench_local(euler::euler::e00041::solve);
 }
+
+#[divan::bench]
+fn bench_00042(bencher: divan::Bencher) {
+    let file_content = std::fs::read_to_string("data/e00042.txt").unwrap();
+    let words = file_content
+        .split(',')
+        .map(|word| word.trim_end_matches('\n').trim_matches('"'))
+        .collect::<Vec<_>>();
+
+    bencher.bench_local(move || euler::euler::e00042::solve(words.as_slice()));
+}
