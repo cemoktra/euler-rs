@@ -207,3 +207,8 @@ fn bench_00038(bencher: divan::Bencher) {
 fn bench_00039(bencher: divan::Bencher) {
     bencher.bench_local(euler::euler::e00039::solve);
 }
+
+#[divan::bench()]
+fn bench_00040(bencher: divan::Bencher) {
+    bencher.bench_local(euler::euler::e00040::solve);
+}
