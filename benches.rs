@@ -228,3 +228,43 @@ fn bench_00042(bencher: divan::Bencher) {
 
     bencher.bench_local(move || euler::euler::e00042::solve(words.as_slice()));
 }
+
+#[divan::bench()]
+fn bench_00043(bencher: divan::Bencher) {
+    bencher.bench_local(euler::euler::e00043::solve);
+}
+
+#[divan::bench()]
+fn bench_00044(bencher: divan::Bencher) {
+    bencher.bench_local(euler::euler::e00044::solve);
+}
+
+#[divan::bench()]
+fn bench_00045(bencher: divan::Bencher) {
+    bencher.bench_local(euler::euler::e00045::solve);
+}
+
+#[divan::bench()]
+fn bench_00046(bencher: divan::Bencher) {
+    bencher.bench_local(euler::euler::e00046::solve);
+}
+
+#[divan::bench(args = [3, 4])]
+fn bench_00047(bencher: divan::Bencher, n: usize) {
+    bencher.bench_local(move || euler::euler::e00047::solve(n));
+}
+
+#[divan::bench(args = [1_000])]
+fn bench_00048(bencher: divan::Bencher, n: u128) {
+    bencher.bench_local(move || euler::euler::e00048::solve(n));
+}
+
+#[divan::bench()]
+fn bench_00049(bencher: divan::Bencher) {
+    bencher.bench_local(euler::euler::e00049::solve);
+}
+
+#[divan::bench(args = [1_000, 1_000_000])]
+fn bench_00050(bencher: divan::Bencher, n: usize) {
+    bencher.bench_local(move || euler::euler::e00050::solve(n));
+}

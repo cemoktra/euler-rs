@@ -1,7 +1,9 @@
 pub mod collatz;
 pub mod digits;
 pub mod fibonacci;
+pub mod hexagonal;
 pub mod palindrome;
+pub mod pentagonal;
 pub mod permutations;
 pub mod primes;
 pub mod triangle;
