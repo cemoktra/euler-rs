@@ -49,3 +49,4 @@ pub mod e00048;
 pub mod e00049;
 pub mod e00050;
 pub mod e00051;
+pub mod e00052;
