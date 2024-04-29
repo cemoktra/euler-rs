@@ -283,3 +283,19 @@ fn bench_00052(bencher: divan::Bencher) {
 fn bench_00053(bencher: divan::Bencher, n: usize) {
     bencher.bench_local(move || euler::euler::e00053::solve(n));
 }
+
+#[divan::bench]
+fn bench_00054(bencher: divan::Bencher) {
+    let file_content = std::fs::read_to_string("data/e00054.txt").unwrap();
+    let hand_pairs = file_content
+        .split('\n')
+        .filter(|line| !line.is_empty())
+        .map(|line| {
+            let hand1 = (&line[0..14]).into();
+            let hand2 = (&line[15..]).into();
+            (hand1, hand2)
+        })
+        .collect::<Vec<_>>();
+
+    bencher.bench_local(move || euler::euler::e00054::solve(&hand_pairs));
+}

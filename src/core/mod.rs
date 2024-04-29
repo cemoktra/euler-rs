@@ -5,6 +5,7 @@ pub mod hexagonal;
 pub mod palindrome;
 pub mod pentagonal;
 pub mod permutations;
+pub mod poker;
 pub mod primes;
 pub mod triangle;
 pub mod ubig;
