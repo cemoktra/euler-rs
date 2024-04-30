@@ -133,11 +133,22 @@ impl<const N: usize> std::ops::MulAssign for UBig<N> {
         }
 
         carry = 0;
-        num.iter_mut().rev().for_each(|v| {
-            let r = *v % 10 + carry;
-            carry = *v / 10;
-            *v = r;
-        });
+
+        loop {
+            let mut finished = true;
+            num.iter_mut().rev().for_each(|v| {
+                let r = *v % 10 + carry;
+                carry = *v / 10;
+                *v = r;
+                if *v >= 10 {
+                    finished = false;
+                }
+            });
+
+            if finished {
+                break;
+            }
+        }
 
         self.num = num;
     }
@@ -184,6 +195,12 @@ mod test {
         let x: super::UBig<4> = [2].as_slice().into();
         let expected: super::UBig<4> = [4, 0, 9, 6].as_slice().into();
         let z = x.pow(12);
+
+        assert_eq!(z, expected);
+
+        let x: super::UBig<10> = [6].as_slice().into();
+        let expected: super::UBig<10> = [1, 0, 0, 7, 7, 6, 9, 6].as_slice().into();
+        let z = x.pow(9);
 
         assert_eq!(z, expected);
     }

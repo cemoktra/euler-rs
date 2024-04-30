@@ -13,7 +13,7 @@ pub fn is_lychrel(mut n: u128) -> bool {
             return false;
         }
     }
-    return true;
+    true
 }
 
 #[cfg(test)]
