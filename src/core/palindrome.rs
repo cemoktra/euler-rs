@@ -1,16 +1,54 @@
-pub fn is_palindrome(mut n: usize) -> bool {
-    if n != 0 && n % 10 == 0 {
-        return false;
+pub trait IsPalindrome:
+    Sized
+    + std::cmp::Eq
+    + std::cmp::PartialOrd
+    + std::ops::Rem<Output = Self>
+    + std::ops::DivAssign
+    + std::ops::AddAssign
+    + std::ops::MulAssign
+    + Copy
+{
+    fn zero() -> Self;
+    fn ten() -> Self;
+
+    fn is_palindrome(&self) -> bool {
+        let zero = Self::zero();
+        let ten = Self::ten();
+        let mut n = *self;
+
+        if n != zero && n % ten == zero {
+            return false;
+        }
+
+        let input = n;
+        let mut reversed = zero;
+        while n > zero {
+            reversed *= ten;
+            reversed += n % ten;
+            n /= ten;
+        }
+        input == reversed
+    }
+}
+
+impl IsPalindrome for u128 {
+    fn zero() -> Self {
+        0
     }
 
-    let input = n;
-    let mut reversed = 0;
-    while n > 0 {
-        reversed *= 10;
-        reversed += n % 10;
-        n /= 10;
+    fn ten() -> Self {
+        10
     }
-    input == reversed
+}
+
+impl IsPalindrome for usize {
+    fn zero() -> Self {
+        0
+    }
+
+    fn ten() -> Self {
+        10
+    }
 }
 
 pub fn is_binary_palindrome(mut n: usize) -> bool {
@@ -28,11 +66,13 @@ pub fn is_binary_palindrome(mut n: usize) -> bool {
 
 #[cfg(test)]
 mod test {
+    use super::IsPalindrome;
+
     #[test]
     fn test_palindrome() {
-        assert!(super::is_palindrome(9009));
-        assert!(super::is_palindrome(906609));
-        assert!(!super::is_palindrome(90660));
+        assert!(9009usize.is_palindrome());
+        assert!(906609usize.is_palindrome());
+        assert!(!90660usize.is_palindrome());
     }
 
     #[test]

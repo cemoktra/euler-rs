@@ -1,4 +1,4 @@
-use crate::core::palindrome::is_palindrome;
+use crate::core::palindrome::IsPalindrome;
 
 pub fn solve(max_factor: usize) -> usize {
     let mut max = 0;
@@ -10,7 +10,7 @@ pub fn solve(max_factor: usize) -> usize {
         }
         for y in (x - 1..max_factor).rev() {
             let p = x * y;
-            if p > max && is_palindrome(p) {
+            if p > max && p.is_palindrome() {
                 max = p;
             }
         }

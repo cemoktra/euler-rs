@@ -299,3 +299,8 @@ fn bench_00054(bencher: divan::Bencher) {
 
     bencher.bench_local(move || euler::euler::e00054::solve(&hand_pairs));
 }
+
+#[divan::bench(args = [10_000])]
+fn bench_00055(bencher: divan::Bencher, n: u128) {
+    bencher.bench_local(move || euler::euler::e00055::solve(n));
+}

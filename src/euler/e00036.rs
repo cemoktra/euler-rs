@@ -1,8 +1,8 @@
-use crate::core::palindrome::{is_binary_palindrome, is_palindrome};
+use crate::core::palindrome::{is_binary_palindrome, IsPalindrome};
 
 pub fn solve(n: usize) -> usize {
     (1..n)
-        .filter(|n| is_palindrome(*n) && is_binary_palindrome(*n))
+        .filter(|n| n.is_palindrome() && is_binary_palindrome(*n))
         .sum()
 }
 

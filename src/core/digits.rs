@@ -1,10 +1,18 @@
 pub struct Digits {
-    current: usize,
+    current: u128,
 }
 
 impl Digits {
-    pub fn new(n: usize) -> Self {
-        Self { current: n }
+    pub fn new<T>(n: T) -> Self
+    where
+        T: TryInto<u128>,
+    {
+        Self {
+            current: match n.try_into() {
+                Ok(n) => n,
+                Err(_err) => panic!("Failed to convert into u128"),
+            },
+        }
     }
 }
 
