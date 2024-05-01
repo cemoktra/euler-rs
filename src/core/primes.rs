@@ -1,13 +1,15 @@
 use std::collections::{BTreeMap, HashMap};
 
 pub fn is_prime(p: usize) -> bool {
-    for d in 2..p / 2 {
-        if p % d == 0 {
+    for divisor in Primes::default() {
+        if p % divisor == 0 {
             return false;
         }
+        if divisor * divisor > p {
+            return true;
+        }
     }
-
-    true
+    unreachable!()
 }
 
 #[derive(Clone)]
