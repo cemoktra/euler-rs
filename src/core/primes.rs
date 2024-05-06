@@ -1,5 +1,36 @@
 use std::collections::{BTreeMap, HashMap};
 
+#[derive(Default)]
+pub struct CachedIsPrime {
+    prime_vec: Vec<usize>,
+    prime_iter: Primes,
+}
+
+impl CachedIsPrime {
+    pub fn is_prime(&mut self, p: usize) -> bool {
+        for divisor in &self.prime_vec {
+            if p % divisor == 0 {
+                return false;
+            }
+            if divisor * divisor > p {
+                return true;
+            }
+        }
+
+        for divisor in self.prime_iter.by_ref() {
+            self.prime_vec.push(divisor);
+            if p % divisor == 0 {
+                return false;
+            }
+            if divisor * divisor > p {
+                return true;
+            }
+        }
+
+        unreachable!()
+    }
+}
+
 pub fn is_prime(p: usize) -> bool {
     for divisor in Primes::default() {
         if p % divisor == 0 {
