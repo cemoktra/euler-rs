@@ -1,13 +1,14 @@
-use crate::core::ubig::UBig;
+use crate::core::digits::Digits;
+use num_bigint::BigUint;
 
 pub fn solve(n: usize) -> usize {
-    let mut big: UBig<400> = [2].as_slice().into();
+    let mut big: BigUint = 2u32.into();
 
     for _ in 1..n {
-        big = big + big;
+        big = big.clone() + big;
     }
 
-    big.digits().sum()
+    Digits::new(big).map(|n| n as usize).sum()
 }
 
 #[cfg(test)]

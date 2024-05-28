@@ -10,5 +10,6 @@ path = "benches.rs"
 harness = false
 
 [dependencies]
-divan = "0.1.13"
-num-bigint = "0.4.4"
+divan = "0.1.14"
+num-bigint = "0.4.5"
+num-traits = "0.2.19"

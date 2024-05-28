@@ -1,32 +1,37 @@
-pub struct Digits {
-    current: u128,
+use crate::core::Ten;
+use std::fmt::Debug;
+
+pub struct Digits<T> {
+    current: T,
 }
 
-impl Digits {
-    pub fn new<T>(n: T) -> Self
-    where
-        T: TryInto<u128>,
-    {
-        Self {
-            current: match n.try_into() {
-                Ok(n) => n,
-                Err(_err) => panic!("Failed to convert into u128"),
-            },
-        }
+impl<T> Digits<T> {
+    pub fn new(n: T) -> Self {
+        Self { current: n }
     }
 }
 
-impl Iterator for Digits {
+impl<T> Iterator for Digits<T>
+where
+    T: num_traits::Zero,
+    T: std::ops::Rem + std::ops::DivAssign,
+    T: Clone,
+    T: Ten,
+    <T as std::ops::Rem>::Output: TryInto<u8>,
+    <<T as std::ops::Rem>::Output as TryInto<u8>>::Error: Debug,
+{
     type Item = u8;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.current == 0 {
+        if self.current.is_zero() {
             return None;
         }
-        let d = self.current % 10;
-        self.current /= 10;
 
-        Some(d as u8)
+        let ten = T::ten();
+        let d = self.current.clone() % ten.clone();
+        self.current /= ten;
+
+        Some(d.try_into().expect("a digit is always a u8"))
     }
 }
 

@@ -1,4 +1,7 @@
-use crate::core::ubig::UBig;
+use crate::core::digits::Digits;
+use num_bigint::BigUint;
+use num_traits::Zero;
+use std::str::FromStr;
 
 const DATA: [&str; 100] = [
     "37107287533902102798797998220837590246510135740250",
@@ -104,22 +107,17 @@ const DATA: [&str; 100] = [
 ];
 
 pub fn solve(n: usize) -> usize {
-    let mut sum = UBig::<60>::zero();
+    let mut sum = BigUint::zero();
 
     for r in DATA {
-        let parsed = r.bytes().map(|c| c - 48).collect::<Vec<_>>();
-        let parsed: UBig<60> = parsed.as_slice().into();
+        let parsed = BigUint::from_str(r).expect("is a valid number");
         sum += parsed;
     }
 
-    let digits = sum
-        .digits()
-        .skip_while(|n| **n == 0)
-        .take(n)
-        .collect::<Vec<_>>();
+    let digits = Digits::new(sum).collect::<Vec<_>>();
     let mut result = 0;
-    for (i, d) in digits.iter().rev().enumerate() {
-        result += *d * 10usize.pow(i as u32);
+    for (i, d) in digits.iter().rev().take(n).rev().enumerate() {
+        result += (*d as usize) * 10usize.pow(i as u32);
     }
 
     result

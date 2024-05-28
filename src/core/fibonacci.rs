@@ -17,15 +17,19 @@ where
 
 impl<T> Iterator for Fibonacci<T>
 where
-    T: Copy + std::ops::AddAssign,
+    T: Clone + num_traits::CheckedAdd,
 {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let current = self.current;
-        self.current = self.next;
-        self.next += current;
-
-        Some(current)
+        let current = self.current.clone();
+        self.current = self.next.clone();
+        match self.next.checked_add(&current) {
+            None => None,
+            Some(next) => {
+                self.next = next;
+                Some(current)
+            }
+        }
     }
 }

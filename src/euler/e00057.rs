@@ -1,17 +1,18 @@
-use crate::core::ubig::UBig;
+use crate::core::digits::Digits;
+use num_bigint::BigUint;
 
 pub fn solve(limit: usize) -> usize {
-    let mut numer = UBig::<400>::from(3);
-    let mut denom = UBig::<400>::from(2);
+    let mut numer = BigUint::from(3u32);
+    let mut denom = BigUint::from(2u32);
     let mut count = 0;
 
     for _ in 1..=limit {
-        let tmp = numer + UBig::<400>::from(2) * denom;
-        denom = numer + denom;
+        let tmp = numer.clone() + BigUint::from(2u32) * denom.clone();
+        denom = numer.clone() + denom.clone();
         numer = tmp;
 
-        let numer_digits = numer.digits().skip_while(|p| **p == 0).count();
-        let denom_digits = denom.digits().skip_while(|p| **p == 0).count();
+        let numer_digits = Digits::new(numer.clone()).count();
+        let denom_digits = Digits::new(denom.clone()).count();
 
         if numer_digits > denom_digits {
             count += 1;

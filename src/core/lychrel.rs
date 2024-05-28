@@ -20,9 +20,9 @@ pub fn is_lychrel(mut n: u128) -> bool {
 mod test {
     #[test]
     fn test_lychrel() {
-        assert!(super::is_lychrel(47));
-        assert!(super::is_lychrel(349));
+        assert!(!super::is_lychrel(47));
+        assert!(!super::is_lychrel(349));
 
-        assert!(!super::is_lychrel(196));
+        assert!(super::is_lychrel(196));
     }
 }
